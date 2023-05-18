@@ -27,7 +27,7 @@ function PlayerCard(props: PlayerCardPropsType) {
         </Group>
       </Card.Section>
       <Card.Section>
-        <Group mx={"md"} position="apart" spacing="xs">
+        <Group mx={"md"} position="apart" spacing="xs" grow>
           {
             !isInEditMode
               ? <Badge size='xl' radius={"xs"}>
@@ -38,12 +38,12 @@ function PlayerCard(props: PlayerCardPropsType) {
                 onChange={setPlayerPoints}
                 step={5}
                 min={0}
-                placeholder="Points"
+                placeholder={`Add to ${props.player.points}`}
                 hideControls
                 radius={"xs"}
               />
           }
-          <ActionIcon variant="subtle" onClick={() => {
+          <ActionIcon hidden={playerPoints === ""} variant="subtle" onClick={() => {
             setIsInEditMode(!isInEditMode);
             isInEditMode && props.setGameState((previousState) => {
               const playerInPreviousState = previousState.players.find((player) => {
@@ -51,7 +51,7 @@ function PlayerCard(props: PlayerCardPropsType) {
               });
               if (playerInPreviousState !== undefined) {
                 const playerInPreviousStatePointsAsNumber = playerInPreviousState.points as number;
-                const playerPointsAsNumber = playerPoints as number;
+                const playerPointsAsNumber = playerPoints === "" ? 0 : playerPoints as number;
                 const updatedPlayer: PlayerType = {
                   points: playerInPreviousStatePointsAsNumber + playerPointsAsNumber,
                   name: playerInPreviousState.name,
@@ -64,12 +64,14 @@ function PlayerCard(props: PlayerCardPropsType) {
                   players: listOfPlayersWithoutThisPlayer,
                 };
                 sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
+                setPlayerPoints("")
                 return nextState
               } else {
                 const nextState = {
                   ...previousState,
                 }
                 sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
+                setPlayerPoints("");
                 return nextState
               }
             })
