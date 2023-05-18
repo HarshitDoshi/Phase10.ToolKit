@@ -3,7 +3,6 @@ import { PlayerCardPropsType } from './types';
 import { ChangeEvent, useState } from 'react';
 import { IconCircleCheck, IconEditCircle, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
 import { PlayerType } from '@/types';
-import { SESSION_STORE } from '@/app/page';
 
 function PlayerCard(props: PlayerCardPropsType) {
   const [isInEditMode, setIsInEditMode] = useState<boolean>(false);
@@ -64,13 +63,13 @@ function PlayerCard(props: PlayerCardPropsType) {
                   ...previousState,
                   players: listOfPlayersWithoutThisPlayer,
                 };
-                sessionStorage.setItem(SESSION_STORE, JSON.stringify(nextState));
+                sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
                 return nextState
               } else {
                 const nextState = {
                   ...previousState,
                 }
-                sessionStorage.setItem(SESSION_STORE, JSON.stringify(nextState));
+                sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
                 return nextState
               }
             })
@@ -101,13 +100,13 @@ function PlayerCard(props: PlayerCardPropsType) {
                 ...previousState,
                 players: listOfPlayersWithoutThisPlayer,
               };
-              sessionStorage.setItem(SESSION_STORE, JSON.stringify(nextState));
+              sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
               return nextState
             } else {
               const nextState = {
                 ...previousState,
               }
-              sessionStorage.setItem(SESSION_STORE, JSON.stringify(nextState));
+              sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
               return nextState
             }
           })
@@ -147,13 +146,13 @@ function PlayerCard(props: PlayerCardPropsType) {
                 ...previousState,
                 players: listOfPlayersWithoutThisPlayer,
               };
-              sessionStorage.setItem(SESSION_STORE, JSON.stringify(nextState));
+              sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
               return nextState
             } else {
               const nextState = {
                 ...previousState,
               }
-              sessionStorage.setItem(SESSION_STORE, JSON.stringify(nextState));
+              sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
               return nextState
             }
           })

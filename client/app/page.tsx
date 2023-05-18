@@ -7,8 +7,6 @@ import { Button, Center, Container, Paper, Image, TextInput, SimpleGrid } from '
 import { IconLock, IconLockOpen, IconMeeple, IconRefresh, IconSquareRoundedPlus } from '@tabler/icons-react';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-export const SESSION_STORE = "Phase10.ToolKit.Game.State";
-
 export default function Home() {
   const initialPhase = 1;
   const firstPhase = 1;
@@ -23,7 +21,7 @@ export default function Home() {
     players: [],
   });
   useEffect(() => {
-    const gameStateFromSessionStorage = sessionStorage.getItem(SESSION_STORE);
+    const gameStateFromSessionStorage = sessionStorage.getItem("Phase10.ToolKit.Game.State");
     if (gameStateFromSessionStorage !== null) {
       setGameState(JSON.parse(gameStateFromSessionStorage));
     } else {
@@ -67,7 +65,7 @@ export default function Home() {
               ...previousState,
               players: previousState.players.concat(newPlayer),
             };
-            sessionStorage.setItem(SESSION_STORE, JSON.stringify(nextState));
+            sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
             return nextState;
           });
           setNewPlayerInput("");
@@ -80,7 +78,7 @@ export default function Home() {
         <Button ml={"xs"} color="red" leftIcon={<IconRefresh size={"1rem"} />} disabled={isGameLocked} onClick={async () => {
           setIsCreatingNewPlayer(true);
           setGameState((previousState) => {
-            sessionStorage.removeItem(SESSION_STORE);
+            sessionStorage.removeItem("Phase10.ToolKit.Game.State");
             return {
               players: [],
             };
