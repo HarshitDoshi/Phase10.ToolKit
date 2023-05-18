@@ -3,7 +3,7 @@
 import HomeIllustration from '@/components/HomeIllustration';
 import PlayerCard from '@/components/PlayerCard';
 import { PlayerType } from '@/types';
-import { Button, Center, Container, Paper, Image, TextInput, SimpleGrid } from '@mantine/core';
+import { Button, Center, Container, Paper, Image, TextInput, SimpleGrid, Group } from '@mantine/core';
 import { IconLock, IconLockOpen, IconMeeple, IconRefresh, IconSquareRoundedPlus } from '@tabler/icons-react';
 import { ChangeEvent, useEffect, useState } from 'react';
 
@@ -35,14 +35,7 @@ export default function Home() {
       <Center sx={(theme) => ({
         marginBottom: theme.spacing.xs,
       })}>
-        <Button onClick={async () => {
-          setIsGameLocked(!isGameLocked);
-        }}
-          loading={isCreatingNewPlayer} loaderPosition="center"
-        >
-          {isGameLocked ? <IconLockOpen size="1rem" /> : <IconLock size="1rem" />}
-        </Button>
-        <Paper shadow="xs" sx={(theme) => ({ width: "100%" })} mx={"xs"}>
+        <Paper shadow="xs" sx={(theme) => ({ width: "100%" })}>
           <TextInput
             disabled={isGameLocked}
             placeholder="Player's name"
@@ -75,21 +68,36 @@ export default function Home() {
         >
           {isCreatingNewPlayer ? "Creating" : "Create"}
         </Button>
-        <Button ml={"xs"} color="red" leftIcon={<IconRefresh size={"1rem"} />} disabled={isGameLocked} onClick={async () => {
-          setIsCreatingNewPlayer(true);
-          setGameState((previousState) => {
-            sessionStorage.removeItem("Phase10.ToolKit.Game.State");
-            return {
-              players: [],
-            };
-          });
-          setNewPlayerInput("");
-          setIsCreatingNewPlayer(false);
-        }}
-          loading={isCreatingNewPlayer} loaderPosition="center"
-        >
-          {"Reset"}
-        </Button>
+      </Center>
+      <Center sx={(theme) => ({
+        marginBottom: theme.spacing.xs,
+      })}>
+        <Paper withBorder shadow="xs" sx={(theme) => ({ width: "100%" })}>
+          <Group position="apart" mt="xs" mb="xs" mx={"xs"} grow>
+            <Button onClick={async () => {
+              setIsGameLocked(!isGameLocked);
+            }}
+              loading={isCreatingNewPlayer} loaderPosition="center"
+            >
+              {isGameLocked ? <IconLockOpen size="1rem" /> : <IconLock size="1rem" />}
+            </Button>
+            <Button color="red" leftIcon={<IconRefresh size={"1rem"} />} disabled={isGameLocked} onClick={async () => {
+              setIsCreatingNewPlayer(true);
+              setGameState((previousState) => {
+                sessionStorage.removeItem("Phase10.ToolKit.Game.State");
+                return {
+                  players: [],
+                };
+              });
+              setNewPlayerInput("");
+              setIsCreatingNewPlayer(false);
+            }}
+              loading={isCreatingNewPlayer} loaderPosition="center"
+            >
+              {"Reset"}
+            </Button>
+          </Group>
+        </Paper>
       </Center>
       <Center>
         <Paper withBorder px={"lg"} py={"lg"} shadow="xs" sx={(theme) => ({ width: "100%" })}>

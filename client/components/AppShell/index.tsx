@@ -12,9 +12,8 @@ function AppShell({ children }: AppShellPropsType) {
   const [opened, setOpened] = useState<boolean>(false);
   return (
     <MantineAppShell
-      padding="md"
       navbarOffsetBreakpoint="sm"
-      asideOffsetBreakpoint="sm"
+      // asideOffsetBreakpoint="sm"
       navbar={<NavigationBar opened={opened} setOpened={setOpened} />}
       // aside={<Aside />}
       header={<Header opened={opened} setOpened={setOpened} />}
