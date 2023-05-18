@@ -46,7 +46,7 @@ export default function Home() {
             icon={<IconMeeple size="1rem" />}
           />
         </Paper>
-        <Button leftIcon={<IconSquareRoundedPlus size={"1rem"} />} disabled={isGameLocked | (newPlayerInput.length <= 0)} onClick={async () => {
+        <Button leftIcon={<IconSquareRoundedPlus size={"1rem"} />} disabled={isGameLocked || (newPlayerInput.length <= 0)} onClick={async () => {
           setIsCreatingNewPlayer(true);
           setGameState((previousState) => {
             const newPlayer: PlayerType[] = [{
