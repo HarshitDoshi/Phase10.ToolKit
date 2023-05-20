@@ -35,7 +35,7 @@ export default function Home() {
       <Center sx={(theme) => ({
         marginBottom: theme.spacing.xs,
       })}>
-        <Paper shadow="xs" sx={(theme) => ({ width: "100%" })}>
+        <Paper mr={"xs"} shadow="xs" sx={(theme) => ({ width: "100%" })}>
           <TextInput
             disabled={isGameLocked}
             placeholder="Player's name"
