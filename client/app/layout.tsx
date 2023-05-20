@@ -7,6 +7,7 @@ import ColorSchemeProvider from "@/providers/ColorSchemeProvider";
 import AppShell from "@/components/AppShell";
 import { useState } from 'react';
 import { ColorScheme } from '@mantine/core';
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -38,6 +39,7 @@ export default function RootLayout({
             </AppShell>
           </MantineProvider>
         </ColorSchemeProvider>
+        <Analytics />
       </body>
     </html>
   )
