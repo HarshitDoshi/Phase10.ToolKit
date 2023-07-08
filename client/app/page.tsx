@@ -31,7 +31,7 @@ export default function Home() {
     }
   }, [])
   return (
-    <Container>
+    <Container px={0}>
       <Center sx={(theme) => ({
         marginBottom: theme.spacing.xs,
       })}>

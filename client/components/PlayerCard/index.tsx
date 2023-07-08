@@ -1,7 +1,7 @@
-import { Card, Group, Text, Badge, RingProgress, Center, ActionIcon, NumberInput } from '@mantine/core';
+import { Card, Group, Text, Badge, RingProgress, Center, ActionIcon, NumberInput, Flex, Indicator } from '@mantine/core';
 import { PlayerCardPropsType } from './types';
 import { ChangeEvent, useState } from 'react';
-import { IconCircleCheck, IconEditCircle, IconPlayerTrackNext, IconPlayerTrackPrev } from '@tabler/icons-react';
+import { IconCircleCheck, IconEditCircle, IconPlayerTrackNext, IconPlayerTrackPrev, IconUser } from '@tabler/icons-react';
 import { PlayerType } from '@/types';
 
 function PlayerCard(props: PlayerCardPropsType) {
@@ -22,9 +22,14 @@ function PlayerCard(props: PlayerCardPropsType) {
   return (
     <Card shadow="sm" padding="xs" radius="md" withBorder>
       <Card.Section>
-        <Group position="apart" mt="xs" mb="xs" mx={"md"} grow>
-          <Text weight={500} size={"xl"}>{props.player.name}</Text>
-        </Group>
+        <Flex mt="xs" mb="xs" mx={"md"} direction={"row"}>
+          <IconUser color={"gray"} size={"2rem"} />
+          <Text mx={"sm"} weight={500} size={"xl"}>{props.player.name}</Text>
+          <Badge mx={"sm"} radius={"md"} size={"xl"} color={"gray"} variant={"outline"}>{props.player.currentPhase - 1}</Badge>
+          <Indicator mx={"sm"} color="gray" position="middle-start" size={16} withBorder processing>
+            <Badge radius={"md"} size={"xl"} color={"gray"} variant={"outline"}>{props.player.currentPhase}</Badge>
+          </Indicator>
+        </Flex>
       </Card.Section>
       <Card.Section>
         <Group mx={"md"} position="apart" spacing="xs" grow>
