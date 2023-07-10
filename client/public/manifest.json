@@ -18,5 +18,6 @@
     "display": "standalone",
     "display_override": ["fullscreen", "standalone"],
     "start_url": "/",
-    "scope": "/"
+    "scope": "/",
+    "id": "/"
 }
