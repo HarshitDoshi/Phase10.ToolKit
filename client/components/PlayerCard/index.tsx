@@ -72,6 +72,16 @@ function PlayerCard(props: PlayerCardPropsType) {
                   sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
                   sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
                   setPlayerPoints("")
+                  if (props.gameChannel) {
+                    props.gameChannel.send({
+                      type: "broadcast",
+                      event: "synchronize",
+                      payload: {
+                        message: `${props.gameState.id}`,
+                        game: nextState,
+                      },
+                    });
+                  }
                   return nextState
                 } else {
                   const nextState = {
@@ -80,6 +90,16 @@ function PlayerCard(props: PlayerCardPropsType) {
                   sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
                   sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
                   setPlayerPoints("");
+                  if (props.gameChannel) {
+                    props.gameChannel.send({
+                      type: "broadcast",
+                      event: "synchronize",
+                      payload: {
+                        message: `${props.gameState.id}`,
+                        game: nextState,
+                      },
+                    });
+                  }
                   return nextState
                 }
               })
@@ -114,6 +134,16 @@ function PlayerCard(props: PlayerCardPropsType) {
                 };
                 sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
                 sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
+                if (props.gameChannel) {
+                  props.gameChannel.send({
+                    type: "broadcast",
+                    event: "synchronize",
+                    payload: {
+                      message: `${props.gameState.id}`,
+                      game: nextState,
+                    },
+                  });
+                }
                 return nextState
               } else {
                 const nextState = {
@@ -121,6 +151,16 @@ function PlayerCard(props: PlayerCardPropsType) {
                 }
                 sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
                 sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
+                if (props.gameChannel) {
+                  props.gameChannel.send({
+                    type: "broadcast",
+                    event: "synchronize",
+                    payload: {
+                      message: `${props.gameState.id}`,
+                      game: nextState,
+                    },
+                  });
+                }
                 return nextState
               }
             })
@@ -164,6 +204,16 @@ function PlayerCard(props: PlayerCardPropsType) {
                 };
                 sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
                 sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
+                if (props.gameChannel) {
+                  props.gameChannel.send({
+                    type: "broadcast",
+                    event: "synchronize",
+                    payload: {
+                      message: `${props.gameState.id}`,
+                      game: nextState,
+                    },
+                  });
+                }
                 return nextState
               } else {
                 const nextState = {
@@ -171,6 +221,16 @@ function PlayerCard(props: PlayerCardPropsType) {
                 }
                 sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
                 sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
+                if (props.gameChannel) {
+                  props.gameChannel.send({
+                    type: "broadcast",
+                    event: "synchronize",
+                    payload: {
+                      message: `${props.gameState.id}`,
+                      game: nextState,
+                    },
+                  });
+                }
                 return nextState
               }
             })
