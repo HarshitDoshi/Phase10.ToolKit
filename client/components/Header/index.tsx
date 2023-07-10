@@ -26,7 +26,11 @@ function Header(props: HeaderPropsType) {
         >
           <Group position="apart">
             <Logo colorScheme={colorScheme} />
-            <ActionIcon variant="default" onClick={() => toggleColorScheme()} size={30}>
+            <ActionIcon variant="default" onClick={() => {
+              toggleColorScheme()
+              const colorSchemeToStoreInSessionStorage = colorScheme === "dark" ? "light" : "dark";
+              localStorage.setItem("Phase10.ToolKit.ColorScheme", JSON.stringify(colorSchemeToStoreInSessionStorage))
+            }} size={30}>
               {colorScheme === 'dark' ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}
             </ActionIcon>
           </Group>

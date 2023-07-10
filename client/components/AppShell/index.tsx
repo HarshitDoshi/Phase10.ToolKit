@@ -17,7 +17,7 @@ function AppShell({ children }: AppShellPropsType) {
       navbar={<NavigationBar opened={opened} setOpened={setOpened} />}
       // aside={<Aside />}
       header={<Header opened={opened} setOpened={setOpened} />}
-      // footer={<Footer />}
+      footer={<Footer />}
       styles={(theme) => ({
           main: {
             background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],

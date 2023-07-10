@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google';
 import MantineProvider from "@/providers/MantineProvider";
 import ColorSchemeProvider from "@/providers/ColorSchemeProvider";
 import AppShell from "@/components/AppShell";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ColorScheme } from '@mantine/core';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -24,6 +24,14 @@ export default function RootLayout({
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+  useEffect(() => {
+    const colorSchemeFromSessionStorage = localStorage.getItem("Phase10.ToolKit.ColorScheme");
+    if (colorSchemeFromSessionStorage !== null) {
+      setColorScheme(JSON.parse(colorSchemeFromSessionStorage));
+    } else {
+      setColorScheme("light");
+    }
+  }, [])
   return (
     <html lang="en">
       <body className={inter.className}>

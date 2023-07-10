@@ -48,19 +48,63 @@ function PlayerCard(props: PlayerCardPropsType) {
                 radius={"xs"}
               />
           }
-          <ActionIcon hidden={playerPoints === ""} variant="subtle" onClick={() => {
-            setIsInEditMode(!isInEditMode);
-            isInEditMode && props.setGameState((previousState) => {
+          {
+            props.userType === "host" && <ActionIcon hidden={playerPoints === ""} variant="subtle" onClick={() => {
+              setIsInEditMode(!isInEditMode);
+              isInEditMode && props.setGameState((previousState) => {
+                const playerInPreviousState = previousState.players.find((player) => {
+                  return (player.name === props.player.name);
+                });
+                if (playerInPreviousState !== undefined) {
+                  const playerInPreviousStatePointsAsNumber = playerInPreviousState.points as number;
+                  const playerPointsAsNumber = playerPoints === "" ? 0 : playerPoints as number;
+                  const updatedPlayer: PlayerType = {
+                    points: playerInPreviousStatePointsAsNumber + playerPointsAsNumber,
+                    name: playerInPreviousState.name,
+                    currentPhase: playerInPreviousState.currentPhase,
+                  }
+                  let listOfPlayersWithoutThisPlayer = previousState.players.filter((player) => player.name !== props.player.name)
+                  listOfPlayersWithoutThisPlayer = listOfPlayersWithoutThisPlayer.concat([updatedPlayer])
+                  const nextState = {
+                    ...previousState,
+                    players: listOfPlayersWithoutThisPlayer,
+                  };
+                  sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
+                  sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
+                  setPlayerPoints("")
+                  return nextState
+                } else {
+                  const nextState = {
+                    ...previousState,
+                  }
+                  sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
+                  sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
+                  setPlayerPoints("");
+                  return nextState
+                }
+              })
+            }} size={40}>
+              {
+                isInEditMode
+                  ? <IconCircleCheck size={"1.5rem"} />
+                  : <IconEditCircle size={"1.5rem"} />
+              }
+            </ActionIcon>
+          }
+        </Group>
+      </Card.Section>
+      <Center>
+        {
+          props.userType === "host" && <ActionIcon variant="subtle" onClick={() => {
+            props.setGameState((previousState) => {
               const playerInPreviousState = previousState.players.find((player) => {
                 return (player.name === props.player.name);
               });
               if (playerInPreviousState !== undefined) {
-                const playerInPreviousStatePointsAsNumber = playerInPreviousState.points as number;
-                const playerPointsAsNumber = playerPoints === "" ? 0 : playerPoints as number;
                 const updatedPlayer: PlayerType = {
-                  points: playerInPreviousStatePointsAsNumber + playerPointsAsNumber,
+                  points: playerInPreviousState.points,
                   name: playerInPreviousState.name,
-                  currentPhase: playerInPreviousState.currentPhase,
+                  currentPhase: (playerInPreviousState.currentPhase - 1) < 0 ? playerInPreviousState.currentPhase : playerInPreviousState.currentPhase - 1,
                 }
                 let listOfPlayersWithoutThisPlayer = previousState.players.filter((player) => player.name !== props.player.name)
                 listOfPlayersWithoutThisPlayer = listOfPlayersWithoutThisPlayer.concat([updatedPlayer])
@@ -69,57 +113,21 @@ function PlayerCard(props: PlayerCardPropsType) {
                   players: listOfPlayersWithoutThisPlayer,
                 };
                 sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
-                setPlayerPoints("")
+                sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
                 return nextState
               } else {
                 const nextState = {
                   ...previousState,
                 }
                 sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
-                setPlayerPoints("");
+                sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
                 return nextState
               }
             })
           }} size={40}>
-            {
-              isInEditMode
-                ? <IconCircleCheck size={"1.5rem"} />
-                : <IconEditCircle size={"1.5rem"} />
-            }
+            <IconPlayerTrackPrev size={"1.5rem"} />
           </ActionIcon>
-        </Group>
-      </Card.Section>
-      <Center>
-        <ActionIcon variant="subtle" onClick={() => {
-          props.setGameState((previousState) => {
-            const playerInPreviousState = previousState.players.find((player) => {
-              return (player.name === props.player.name);
-            });
-            if (playerInPreviousState !== undefined) {
-              const updatedPlayer: PlayerType = {
-                points: playerInPreviousState.points,
-                name: playerInPreviousState.name,
-                currentPhase: (playerInPreviousState.currentPhase - 1) < 0 ? playerInPreviousState.currentPhase : playerInPreviousState.currentPhase - 1,
-              }
-              let listOfPlayersWithoutThisPlayer = previousState.players.filter((player) => player.name !== props.player.name)
-              listOfPlayersWithoutThisPlayer = listOfPlayersWithoutThisPlayer.concat([updatedPlayer])
-              const nextState = {
-                ...previousState,
-                players: listOfPlayersWithoutThisPlayer,
-              };
-              sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
-              return nextState
-            } else {
-              const nextState = {
-                ...previousState,
-              }
-              sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
-              return nextState
-            }
-          })
-        }} size={40}>
-          <IconPlayerTrackPrev size={"1.5rem"} />
-        </ActionIcon>
+        }
         <RingProgress
           roundCaps
           label={
@@ -136,36 +144,40 @@ function PlayerCard(props: PlayerCardPropsType) {
             };
           })}
         />
-        <ActionIcon variant="subtle" onClick={() => {
-          props.setGameState((previousState) => {
-            const playerInPreviousState = previousState.players.find((player) => {
-              return (player.name === props.player.name);
-            });
-            if (playerInPreviousState !== undefined) {
-              const updatedPlayer: PlayerType = {
-                points: playerInPreviousState.points,
-                name: playerInPreviousState.name,
-                currentPhase: (playerInPreviousState.currentPhase + 1) > 10 ? playerInPreviousState.currentPhase : playerInPreviousState.currentPhase + 1,
+        {
+          props.userType === "host" && <ActionIcon variant="subtle" onClick={() => {
+            props.setGameState((previousState) => {
+              const playerInPreviousState = previousState.players.find((player) => {
+                return (player.name === props.player.name);
+              });
+              if (playerInPreviousState !== undefined) {
+                const updatedPlayer: PlayerType = {
+                  points: playerInPreviousState.points,
+                  name: playerInPreviousState.name,
+                  currentPhase: (playerInPreviousState.currentPhase + 1) > 10 ? playerInPreviousState.currentPhase : playerInPreviousState.currentPhase + 1,
+                }
+                let listOfPlayersWithoutThisPlayer = previousState.players.filter((player) => player.name !== props.player.name)
+                listOfPlayersWithoutThisPlayer = listOfPlayersWithoutThisPlayer.concat([updatedPlayer])
+                const nextState = {
+                  ...previousState,
+                  players: listOfPlayersWithoutThisPlayer,
+                };
+                sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
+                sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
+                return nextState
+              } else {
+                const nextState = {
+                  ...previousState,
+                }
+                sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
+                sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(props.userType));
+                return nextState
               }
-              let listOfPlayersWithoutThisPlayer = previousState.players.filter((player) => player.name !== props.player.name)
-              listOfPlayersWithoutThisPlayer = listOfPlayersWithoutThisPlayer.concat([updatedPlayer])
-              const nextState = {
-                ...previousState,
-                players: listOfPlayersWithoutThisPlayer,
-              };
-              sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
-              return nextState
-            } else {
-              const nextState = {
-                ...previousState,
-              }
-              sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(nextState));
-              return nextState
-            }
-          })
-        }} size={40}>
-          <IconPlayerTrackNext size={"1.5rem"} />
-        </ActionIcon>
+            })
+          }} size={40}>
+            <IconPlayerTrackNext size={"1.5rem"} />
+          </ActionIcon>
+        }
       </Center>
     </Card>
   );
