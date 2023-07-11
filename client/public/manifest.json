@@ -22,6 +22,15 @@
         "social",
         "utilities"
     ],
+    "edge_side_panel": {
+        "preferred_width": 400
+    },
+    "handle_links": "preferred",
+    "launch_handler": {
+        "client_mode": [
+            "navigate-existing, auto"
+        ]
+    },
     "screenshots": [
         {
             "src": "/screenshots/1.png",
