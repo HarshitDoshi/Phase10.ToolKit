@@ -29,6 +29,7 @@ export default function RootLayout({
         </LayoutProvider>
         <Analytics />
       </body>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5817026777177474" crossOrigin="anonymous"></script>
     </html>
   )
 }
