@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "se.shunyaek.p10tk",
+        "sha256_cert_fingerprints": ["29:03:19:E9:7C:DC:68:38:28:ED:F3:46:05:DF:73:FC:B7:94:CF:2E:5C:87:B4:7A:E9:6D:1A:F1:07:1A:EB:24"]
+      }
+    }]
