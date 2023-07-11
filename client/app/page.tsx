@@ -3,9 +3,9 @@
 import HomeIllustration from '@/components/HomeIllustration';
 import PlayerCard from '@/components/PlayerCard';
 import { PlayerType } from '@/types';
-import { Button, Text, Center, Container, Paper, TextInput, SimpleGrid, Group, Badge, useMantineColorScheme, Flex, Modal, Radio, useMantineTheme } from '@mantine/core';
-import { IconHourglass, IconLock, IconLockOpen, IconMeeple, IconRefresh, IconSquareRoundedPlus, IconTrash } from '@tabler/icons-react';
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Button, Text, Center, Container, Paper, TextInput, SimpleGrid, Group, useMantineColorScheme, Flex, Modal, Radio, useMantineTheme } from '@mantine/core';
+import { IconClipboard, IconClipboardCheck, IconHourglass, IconLock, IconLockOpen, IconMeeple, IconRefresh, IconSquareRoundedPlus, IconTrash } from '@tabler/icons-react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { customAlphabet } from 'nanoid/async';
 import {
   RealtimeChannel,
@@ -13,15 +13,19 @@ import {
   createClient
 } from '@supabase/supabase-js';
 import { useForm } from '@mantine/form';
-import { useDisclosure } from '@mantine/hooks';
+import { useClipboard, useDisclosure } from '@mantine/hooks';
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function Home() {
   const theme = useMantineTheme();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const router = useRouter();
+  const searchParameters = useSearchParams();
+  const clipboard = useClipboard({ timeout: 500 });
   const [opened, { open, close }] = useDisclosure(true);
   const form = useForm({
     initialValues: {
-      gameID: '',
+      gameID: searchParameters.get("game") || '',
     },
     validate: {
       gameID: (value) => (value.length === 20 ? null : 'Invalid Game ID'),
@@ -53,6 +57,8 @@ export default function Home() {
     const userTypeFromSessionStorage = sessionStorage.getItem("Phase10.ToolKit.User.Type");
     if (userTypeFromSessionStorage !== null) {
       setUserType(JSON.parse(userTypeFromSessionStorage) as "host" | "spectator");
+    } else {
+      setUserType("spectator");
     }
     if (gameStateFromSessionStorage !== null) {
       const parsedGameStateFromSessionStorage: {
@@ -73,7 +79,6 @@ export default function Home() {
       setGameChannel(channel);
       close();
     } else {
-      setUserType("spectator")
       setGameState({
         id: "",
         players: [],
@@ -194,14 +199,28 @@ export default function Home() {
           userType === "host" && <Flex w={"100%"} direction={"column"} justify={"center"} align={"flex-end"}>
             {
               gameState.id.length === 20
-                ? <Badge my={"sm"} w={"100%"} sx={{ textTransform: "none" }} fullWidth variant={"outline"} color={colorScheme === "dark" ? "gray" : "dark"} ff={"monospace"} fw={"bold"} size={"xl"} radius={"sm"}>
-                  {gameState.id}
-                </Badge>
+                ? <Button
+                  variant={"light"}
+                  my={"sm"} w={"100%"}
+                  ff={"monospace"} fw={"bold"} size={"md"} radius={"sm"}
+                  color={clipboard.copied ? "green" : "red"}
+                  onClick={() => clipboard.copy(`Game ID: ${gameState.id}\nGame Link: ${process.env.NODE_ENV === "development" ? "http://localhost:3333/?game=" : "https://phase10.shunyaek.se?game="}${gameState.id}`)}
+                  leftIcon={
+                    clipboard.copied
+                      ? <IconClipboardCheck size={"1.5rem"} />
+                      : <IconClipboard size={"1.5rem"} />
+                  }
+                >
+                  {
+                    clipboard.copied
+                      ? `${gameState.id}`
+                      : `${gameState.id}`
+                  }
+                </Button>
                 : <Button variant={"outline"} color={colorScheme === "dark" ? "gray" : "dark"} mt={"sm"} w={"100%"} radius={"sm"} onClick={async () => {
                   const nanoid = customAlphabet('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ', 20)
                   const id = await nanoid();
                   setGameState((previousGameState) => {
-                    console.log({ previousGameState });
                     return {
                       ...previousGameState,
                       id: id,
@@ -251,9 +270,24 @@ export default function Home() {
         }
       </Modal>
       <Flex direction={"column"} justify={"center"} align={"center"} mb={"sm"}>
-        <Badge my={"sm"} w={"100%"} sx={{ textTransform: "none" }} fullWidth variant={"outline"} color={colorScheme === "dark" ? "gray" : "dark"} ff={"monospace"} fw={"bold"} size={"xl"} radius={"sm"}>
-          {gameState.id}
-        </Badge>
+        <Button
+          variant={"light"}
+          my={"sm"} w={"100%"}
+          ff={"monospace"} fw={"bold"} size={"md"} radius={"sm"}
+          color={clipboard.copied ? "green" : "red"}
+          onClick={() => clipboard.copy(`Game ID: ${gameState.id}\nGame Link: ${process.env.NODE_ENV === "development" ? "http://localhost:3333/?game=" : "https://phase10.shunyaek.se?game="}${gameState.id}`)}
+          leftIcon={
+            clipboard.copied
+              ? <IconClipboardCheck size={"1.5rem"} />
+              : <IconClipboard size={"1.5rem"} />
+          }
+        >
+          {
+            clipboard.copied
+              ? `${gameState.id}`
+              : `${gameState.id}`
+          }
+        </Button>
       </Flex>
       {
         userType === "host"
@@ -366,6 +400,7 @@ export default function Home() {
               });
               setNewPlayerInput("");
               setIsCreatingNewPlayer(false);
+              router.push("/");
               open();
             }}
               loading={isCreatingNewPlayer} loaderPosition="center"
