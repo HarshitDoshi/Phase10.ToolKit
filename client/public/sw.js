@@ -7,6 +7,48 @@ const CACHE = "pwabuilder-page";
 // TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
 const offlineFallbackPage = "offline.html";
 
+self.addEventListener("sync", (event) => {
+  if (event.tag == "send-message") {
+    event.waitUntil(sendMessage());
+  }
+});
+
+self.addEventListener("backgroundfetchsuccess", (event) => {
+  const registration = event.registration;
+
+  event.waitUntil(async () => {
+    const registration = event.registration;
+    const records = await registration.matchAll();
+    const responsePromises = records.map(
+      async (record) => await record.responseReady,
+    );
+
+    const responses = Promise.all(responsePromises);
+    // do something with the responses
+  });
+  event.updateUI({ title: "Finished your download!" });
+});
+
+self.addEventListener("backgroundfetchfail", (event) => {
+  event.updateUI({ title: "Could not complete download" });
+});
+
+self.addEventListener("backgroundfetchclick", (event) => {
+  const registration = event.registration;
+
+  if (registration.result === "success") {
+    clients.openWindow("/play-movie");
+  } else {
+    clients.openWindow("/movie-download-progress");
+  }
+});
+
+self.addEventListener("periodicsync", (event) => {
+  if (event.tag === "update-news") {
+    event.waitUntil(updateNews());
+  }
+});
+
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
