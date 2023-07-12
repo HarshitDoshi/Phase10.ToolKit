@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | shunyaek.se</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+        :root {
+            --base-font-size: 16px;
+            --standard-margin: 0 auto;
+            --standard-padding: 0.5rem;
+            --double-padding: calc(var(--standard-padding) * 2);
+            --slim-padding: calc(var(--standard-padding) / 5);
+            --background: #f8fafc;
+            --header-and-footer-border: #f1f5f9;
+            --text: #0f172a;
+            --serif-font: 'Zilla Slab', serif;
+            --monospace-font: monospace;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base-font-size: 16px;
+                --standard-margin: 0 auto;
+                --standard-padding: 0.5rem;
+                --double-padding: calc(var(--standard-padding) * 2);
+                --slim-padding: calc(var(--standard-padding) / 5);
+                --background: #0f172a;
+                --header-and-footer-border: #1e293b;
+                --text: #f8fafc;
+                --serif-font: 'Zilla Slab', serif;
+                --monospace-font: monospace;
+            }
+        }
+
+        @media (min-width: 640px) {}
+
+        @media (min-width: 768px) {}
+
+        @media (min-width: 1024px) {}
+
+        @media (min-width: 1280px) {}
+
+        @media (min-width: 1536px) {}
+
+        html {
+            font-size: var(--base-font-size);
+        }
+
+        body,
+        header,
+        main,
+        section,
+        footer,
+        table caption,
+        table td,
+        table th {
+            padding: var(--standard-padding);
+            margin: var(--standard-margin);
+            max-width: none;
+        }
+
+        body {
+            padding: 0rem 0rem;
+            font-size: clamp(100%, 1rem + 2vw, 1.5rem);
+            background-color: var(--background);
+            color: var(--text);
+            font-family: var(--serif-font);
+        }
+
+        main {
+            padding-top: calc(var(--double-padding) * 4);
+            padding-bottom: calc(var(--double-padding) * 4);
+        }
+
+        header,
+        footer {
+            padding: var(--standard-padding);
+            font-weight: bold;
+        }
+
+        header {
+            text-align: center;
+            max-width: 100%;
+            width: 100%;
+            margin: var(--standard-margin);
+            position: fixed;
+            top: 0;
+            background-color: var(--background);
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 0;
+            border-bottom: 0.2rem solid var(--header-and-footer-border);
+        }
+
+        header nav {
+            max-width: 100%;
+            width: max-content;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        header nav a:nth-child(1) {
+            color: var(--text);
+            text-decoration: none;
+            border: 0.2rem solid var(--text);
+        }
+
+        header nav a:nth-child(1):link {
+            color: var(--text);
+            text-decoration: none;
+            padding-left: var(--standard-padding);
+            padding-right: var(--standard-padding);
+            margin-left: var(--double-padding);
+            margin-right: var(--double-padding);
+        }
+
+        header nav a:nth-child(1):visited {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        header nav a:nth-child(1):hover {
+            text-decoration: none;
+        }
+
+        header nav a:link {
+            color: var(--text);
+            text-decoration: none;
+            padding-left: var(--standard-padding);
+            padding-right: var(--standard-padding);
+            margin: var(--standard-margin);
+            min-width: fit-content;
+        }
+
+        header nav a:visited {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        header nav a:hover {
+            text-decoration: overline;
+            text-decoration-color: var(--text);
+        }
+
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        section {
+            max-width: 75%;
+            line-height: 1.25;
+        }
+
+        article>p {
+            max-width: 50rem;
+            margin: var(--standard-margin);
+            padding: var(--standard-padding);
+            text-align: center;
+            font-size: clamp(100%, 1rem + 2vw, 1rem);
+        }
+
+        h1 {
+            max-width: 80%;
+            padding-top: var(--standard-padding);
+            padding-left: var(--standard-padding);
+            padding-right: var(--standard-padding);
+            margin: var(--standard-margin);
+            text-align: center;
+            color: var(--text);
+            font-family: var(--serif-font);
+            font-size: clamp(100%, 3rem + 2vw, 3rem);
+        }
+
+        article>p>time,
+        article>p>span {
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        img {
+            margin: var(--standard-margin);
+            max-width: 100%;
+            height: auto;
+            object-fit: cover;
+            border: 0.4rem solid var(--text);
+            display: block;
+        }
+
+        p a:link,
+        p a:visited {
+            color: var(--text);
+            text-decoration: underline;
+            text-decoration-color: var(--text);
+        }
+
+        li {
+            padding: var(--slim-padding);
+        }
+
+        code,
+        pre {
+            font-family: var(--monospace-font);
+            tab-size: 4;
+            white-space: pre-wrap;
+            overflow: scroll;
+            max-height: 25rem;
+            height: 25rem;
+            font-size: clamp(90%, 1rem + 2vw, 1rem);
+        }
+
+        pre {
+            padding-left: var(--double-padding);
+            padding-right: var(--double-padding);
+            border: 0.2rem solid var(--text);
+        }
+
+        hr {
+            background-color: var(--text);
+            opacity: 10%;
+            height: 0.1rem;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        footer {
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            max-width: 100%;
+            width: 100%;
+            margin: var(--standard-margin);
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 0;
+            background-color: var(--background);
+            border-top: 0.2rem solid var(--header-and-footer-border);
+        }
+
+        table {
+            margin: var(--standard-margin);
+            max-width: 100%;
+            width: max-content;
+            height: auto;
+            border: 0.2rem solid var(--text);
+            text-align: center;
+            border-spacing: 0rem;
+            overflow: scroll;
+            display: block;
+        }
+
+        table thead,
+        table tbody {
+            max-width: max-content;
+            width: max-content;
+            height: auto;
+        }
+
+        table caption {
+            border-bottom: 0.2rem solid var(--text);
+        }
+
+        table thead tr th:nth-child(1) {
+            border-bottom: 0.2rem solid var(--text);
+            border-right: 0.2rem solid var(--text);
+            max-width: fit-content;
+            width: fit-content;
+            height: auto;
+        }
+
+        table thead tr th {
+            border-bottom: 0.2rem solid var(--text);
+            max-width: max-content;
+            width: max-content;
+            column-width: auto;
+            height: auto;
+        }
+
+        table tbody tr th {
+            border-right: 0.2rem solid var(--text);
+            max-width: fit-content;
+            width: fit-content;
+            height: auto;
+        }
+
+        table tbody tr td {
+            max-width: max-content;
+            width: max-content;
+            column-width: auto;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Privacy Policy</h1>
+    <p>
+        This privacy policy applies to the Phase10.ToolKit app, which is developed and operated by shunyaek.
+    </p>
+    <h2>
+        What data do we collect?
+    </h2>
+    <p>
+        We collect the following data from users of our app:
+    <ul>
+        <li>
+            Device information, such as the device's model, operating system, and unique identifier.
+        </li>
+        <li>
+            Usage data, such as the app's features that users have used and the frequency with which they have used
+            them.
+        </li>
+        <li>
+            Crash reports, which are automatically generated when the app crashes.
+        </li>
+    </ul>
+    </p>
+    <h2>
+        How do we use your data?
+    </h2>
+    <p>
+        We use your data to:
+    <ul>
+        <li>
+            Provide and improve the app.
+        </li>
+        <li>
+            Analyze how users use the app.
+        </li>
+        <li>
+            Detect and fix bugs.
+        </li>
+        <li>
+            Send you marketing messages, if you have opted in to receive them.
+        </li>
+    </ul>
+    </p>
+    <h2>
+        Who do we share your data with?
+    </h2>
+    <p>
+        We may share your data with third-party partners who help us provide and improve the app. These partners may
+        include analytics providers, advertising networks, and crash reporting services.
+    </p>
+    <h2>
+        How do we protect your data?
+    </h2>
+    <p>
+        We take steps to protect your data, such as using encryption and security measures to prevent unauthorized
+        access.
+    </p>
+    <h2>
+        Your rights
+    </h2>
+    <p>
+        You have the right to access, correct, delete, or restrict the use of your data. You also have the right to opt
+        out of receiving marketing messages.
+    </p>
+    <h2>
+        How to contact us
+    </h2>
+    <p>
+        If you have any questions about this privacy policy, please contact us at 01@shunyaek.se.
+    </p>
+    <h2>
+        Changes to this privacy policy
+    </h2>
+    <p>
+        We may update this privacy policy from time to time. The latest version will always be available on our website.
+    </p>
+    <p>
+        This privacy policy was last updated on 2023-07-12.
+    </p>
+</body>
+</html>
