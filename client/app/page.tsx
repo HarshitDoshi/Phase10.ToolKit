@@ -3,8 +3,8 @@
 import HomeIllustration from '@/components/HomeIllustration';
 import PlayerCard from '@/components/PlayerCard';
 import { PlayerType } from '@/types';
-import { Button, Text, Center, Container, Paper, TextInput, SimpleGrid, Group, useMantineColorScheme, Flex, Modal, Radio, useMantineTheme } from '@mantine/core';
-import { IconClipboard, IconClipboardCheck, IconHourglass, IconLock, IconLockOpen, IconMeeple, IconRefresh, IconSquareRoundedPlus, IconTrash } from '@tabler/icons-react';
+import { Button, Text, Center, Container, Paper, TextInput, SimpleGrid, Group, useMantineColorScheme, Flex, Modal, Radio, useMantineTheme, ActionIcon } from '@mantine/core';
+import { IconClipboard, IconClipboardCheck, IconHourglass, IconLock, IconLockOpen, IconMeeple, IconMoonStars, IconRefresh, IconSquareRoundedPlus, IconSun, IconTrash } from '@tabler/icons-react';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { customAlphabet } from 'nanoid/async';
 import {
@@ -156,7 +156,6 @@ export default function Home() {
                       // && payload.type === "broadcast"
                       // && payload["payload"]["message"] === "SYNCHRONIZE"
                     ) {
-                      console.log("at spectator...");
                       channel.send({
                         type: "broadcast",
                         event: "synchronize",
@@ -189,9 +188,18 @@ export default function Home() {
                 placeholder="Enter Game ID"
                 {...form.getInputProps('gameID')}
               />
-              <Group position="right" mt="md">
-                <Button type="submit">Enter</Button>
-              </Group>
+              <Flex direction={"row"} align={"center"} justify={"space-between"}>
+                <ActionIcon variant="default" onClick={() => {
+                  toggleColorScheme()
+                  const colorSchemeToStoreInSessionStorage = colorScheme === "dark" ? "light" : "dark";
+                  localStorage.setItem("Phase10.ToolKit.ColorScheme", JSON.stringify(colorSchemeToStoreInSessionStorage))
+                }} size={30}>
+                  {colorScheme === 'dark' ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}
+                </ActionIcon>
+                <Group position="right">
+                  <Button type="submit">Enter</Button>
+                </Group>
+              </Flex>
             </form>
           </Flex>
         }
@@ -201,7 +209,7 @@ export default function Home() {
               gameState.id.length === 20
                 ? <Button
                   variant={"light"}
-                  my={"sm"} w={"100%"}
+                  mt={"sm"} w={"100%"}
                   ff={"monospace"} fw={"bold"} size={"md"} radius={"sm"}
                   color={clipboard.copied ? "green" : "red"}
                   onClick={() => clipboard.copy(`Game ID: ${gameState.id}\nGame Link: ${process.env.NODE_ENV === "development" ? "http://localhost:3333/?game=" : "https://phase10.shunyaek.se?game="}${gameState.id}`)}
@@ -229,66 +237,76 @@ export default function Home() {
                   })
                 }}>Generate Game ID</Button>
             }
-            <Group position="right" mt="md">
-              <Button disabled={gameState.id.length !== 20 || gameClient === undefined} type="submit" onClick={() => {
-                if (gameClient) {
-                  const channel = gameClient.channel(gameState.id);
-                  channel
-                    .on(
-                      'broadcast',
-                      { event: 'synchronize' },
-                      (payload) => {
-                        // console.log({ payload });
-                      }
-                    )
-                    .subscribe((status) => {
-                      if (
-                        status === "SUBSCRIBED"
-                        // payload.event === "synchronize"
-                        // && payload.type === "broadcast"
-                        // && payload["payload"]["message"] === "SYNCHRONIZE"
-                      ) {
-                        console.log("at host...");
-                        channel.send({
-                          type: "broadcast",
-                          event: "synchronize",
-                          payload: {
-                            message: `${gameState.id}`,
-                            game: gameState,
-                          },
-                        });
-                      }
-                    });
-                  setGameChannel(channel);
-                  sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(gameState));
-                  sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(userType));
-                  close();
-                }
-              }}>Create</Button>
-            </Group>
+            <Flex w={"100%"} mt={"sm"} direction={"row"} align={"center"} justify={"space-between"}>
+              <ActionIcon variant="default" onClick={() => {
+                toggleColorScheme()
+                const colorSchemeToStoreInSessionStorage = colorScheme === "dark" ? "light" : "dark";
+                localStorage.setItem("Phase10.ToolKit.ColorScheme", JSON.stringify(colorSchemeToStoreInSessionStorage))
+              }} size={30}>
+                {colorScheme === 'dark' ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}
+              </ActionIcon>
+              <Group position="right">
+                <Button disabled={gameState.id.length !== 20 || gameClient === undefined} type="submit" onClick={() => {
+                  if (gameClient) {
+                    const channel = gameClient.channel(gameState.id);
+                    channel
+                      .on(
+                        'broadcast',
+                        { event: 'synchronize' },
+                        (payload) => {
+                          // console.log({ payload });
+                        }
+                      )
+                      .subscribe((status) => {
+                        if (
+                          status === "SUBSCRIBED"
+                          // payload.event === "synchronize"
+                          // && payload.type === "broadcast"
+                          // && payload["payload"]["message"] === "SYNCHRONIZE"
+                        ) {
+                          channel.send({
+                            type: "broadcast",
+                            event: "synchronize",
+                            payload: {
+                              message: `${gameState.id}`,
+                              game: gameState,
+                            },
+                          });
+                        }
+                      });
+                    setGameChannel(channel);
+                    sessionStorage.setItem("Phase10.ToolKit.Game.State", JSON.stringify(gameState));
+                    sessionStorage.setItem("Phase10.ToolKit.User.Type", JSON.stringify(userType));
+                    close();
+                  }
+                }}>Create</Button>
+              </Group>
+            </Flex>
           </Flex>
         }
       </Modal>
-      <Flex direction={"column"} justify={"center"} align={"center"} mb={"sm"}>
-        <Button
-          variant={"light"}
-          my={"sm"} w={"100%"}
-          ff={"monospace"} fw={"bold"} size={"md"} radius={"sm"}
-          color={clipboard.copied ? "green" : "red"}
-          onClick={() => clipboard.copy(`Game ID: ${gameState.id}\nGame Link: ${process.env.NODE_ENV === "development" ? "http://localhost:3333/?game=" : "https://phase10.shunyaek.se?game="}${gameState.id}`)}
-          leftIcon={
-            clipboard.copied
-              ? <IconClipboardCheck size={"1.5rem"} />
-              : <IconClipboard size={"1.5rem"} />
-          }
-        >
-          {
-            clipboard.copied
-              ? `${gameState.id}`
-              : `${gameState.id}`
-          }
-        </Button>
-      </Flex>
+      {
+        !opened && <Flex direction={"column"} justify={"center"} align={"center"} mb={"xs"}>
+          <Button
+            variant={"light"}
+            w={"100%"}
+            ff={"monospace"} fw={"bold"} size={"md"} radius={"sm"}
+            color={clipboard.copied ? "green" : "red"}
+            onClick={() => clipboard.copy(`Game ID: ${gameState.id}\nGame Link: ${process.env.NODE_ENV === "development" ? "http://localhost:3333/?game=" : "https://phase10.shunyaek.se?game="}${gameState.id}`)}
+            leftIcon={
+              clipboard.copied
+                ? <IconClipboardCheck size={"1.5rem"} />
+                : <IconClipboard size={"1.5rem"} />
+            }
+          >
+            {
+              clipboard.copied
+                ? `${gameState.id}`
+                : `${gameState.id}`
+            }
+          </Button>
+        </Flex>
+      }
       {
         userType === "host"
         && gameState.id.length === 20
@@ -342,74 +360,76 @@ export default function Home() {
           </Button>
         </Center>
       }
-      <Center sx={(theme) => ({
-        marginBottom: theme.spacing.xs,
-      })}>
-        <Paper withBorder shadow="xs" sx={(theme) => ({ width: "100%" })}>
-          <Group position="apart" mt="xs" mb="xs" mx={"xs"} grow>
-            {
-              userType === "host"
-              && <Button leftIcon={isGameLocked ? <IconLockOpen size="1rem" /> : <IconLock size="1rem" />} onClick={async () => {
-                setIsGameLocked(!isGameLocked);
+      {
+        !opened && <Center sx={(theme) => ({
+          marginBottom: theme.spacing.xs,
+        })}>
+          <Paper withBorder shadow="xs" sx={(theme) => ({ width: "100%" })}>
+            <Group position="apart" mt="xs" mb="xs" mx={"xs"} grow>
+              {
+                userType === "host"
+                && <Button leftIcon={isGameLocked ? <IconLockOpen size="1rem" /> : <IconLock size="1rem" />} onClick={async () => {
+                  setIsGameLocked(!isGameLocked);
+                }}
+                  loading={isCreatingNewPlayer} loaderPosition="center"
+                >
+                  {"Lock"}
+                </Button>
+              }
+              {
+                userType === "spectator"
+                && <Button leftIcon={isSynchronizing ? <IconHourglass size="1rem" /> : <IconRefresh size="1rem" />} onClick={async () => {
+                  if (gameChannel) {
+                    setIsSynchronizing(true);
+                    gameChannel.send({
+                      type: "broadcast",
+                      event: "synchronize",
+                      payload: {
+                        message: `SYNCHRONIZE`,
+                      },
+                    });
+                    setIsSynchronizing(false);
+                  }
+                }}
+                  loading={isSynchronizing} loaderPosition="center"
+                >
+                  {"Refresh"}
+                </Button>
+              }
+              <Button color="red" leftIcon={<IconTrash size={"1rem"} />} disabled={isGameLocked} onClick={async () => {
+                setIsCreatingNewPlayer(true);
+                setGameState((previousState) => {
+                  sessionStorage.removeItem("Phase10.ToolKit.Game.State");
+                  const nextState = {
+                    ...previousState,
+                    id: "",
+                    players: [],
+                  };
+                  if (userType === "host" && gameChannel) {
+                    gameChannel.send({
+                      type: "broadcast",
+                      event: "synchronize",
+                      payload: {
+                        message: `${gameState.id}`,
+                        game: nextState,
+                      },
+                    });
+                  }
+                  return nextState;
+                });
+                setNewPlayerInput("");
+                setIsCreatingNewPlayer(false);
+                router.push("/");
+                open();
               }}
                 loading={isCreatingNewPlayer} loaderPosition="center"
               >
-                {"Lock"}
+                {"Reset"}
               </Button>
-            }
-            {
-              userType === "spectator"
-              && <Button leftIcon={isSynchronizing ? <IconHourglass size="1rem" /> : <IconRefresh size="1rem" />} onClick={async () => {
-                if (gameChannel) {
-                  setIsSynchronizing(true);
-                  gameChannel.send({
-                    type: "broadcast",
-                    event: "synchronize",
-                    payload: {
-                      message: `SYNCHRONIZE`,
-                    },
-                  });
-                  setIsSynchronizing(false);
-                }
-              }}
-                loading={isSynchronizing} loaderPosition="center"
-              >
-                {"Refresh"}
-              </Button>
-            }
-            <Button color="red" leftIcon={<IconTrash size={"1rem"} />} disabled={isGameLocked} onClick={async () => {
-              setIsCreatingNewPlayer(true);
-              setGameState((previousState) => {
-                sessionStorage.removeItem("Phase10.ToolKit.Game.State");
-                const nextState = {
-                  ...previousState,
-                  id: "",
-                  players: [],
-                };
-                if (userType === "host" && gameChannel) {
-                  gameChannel.send({
-                    type: "broadcast",
-                    event: "synchronize",
-                    payload: {
-                      message: `${gameState.id}`,
-                      game: nextState,
-                    },
-                  });
-                }
-                return nextState;
-              });
-              setNewPlayerInput("");
-              setIsCreatingNewPlayer(false);
-              router.push("/");
-              open();
-            }}
-              loading={isCreatingNewPlayer} loaderPosition="center"
-            >
-              {"Reset"}
-            </Button>
-          </Group>
-        </Paper>
-      </Center>
+            </Group>
+          </Paper>
+        </Center>
+      }
       <Center>
         <Paper withBorder px={"lg"} py={"lg"} shadow="xs" sx={(theme) => ({ width: "100%" })}>
           {gameState.players.length === 0 && <HomeIllustration />}
