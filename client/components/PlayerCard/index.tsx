@@ -26,7 +26,7 @@ function PlayerCard(props: PlayerCardPropsType) {
           <IconUser color={"gray"} size={"2rem"} />
           <Text mx={"sm"} weight={500} size={"xl"}>{props.player.name}</Text>
           <Badge mx={"sm"} radius={"md"} size={"xl"} color={"gray"} variant={"outline"}>{props.player.currentPhase - 1}</Badge>
-          <Indicator mx={"sm"} color="gray" position="middle-start" size={16} withBorder processing>
+          <Indicator mx={"sm"} color="gray" position="middle-start" size={16} withBorder processing zIndex={1}>
             <Badge radius={"md"} size={"xl"} color={"gray"} variant={"outline"}>{props.player.currentPhase}</Badge>
           </Indicator>
         </Flex>
